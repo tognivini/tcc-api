@@ -19,18 +19,28 @@ export class UpdateUserUseCase implements IUpdateUserUseCase {
     id: string,
     dto: UpdateUserDto
   ): Promise<HttpResponse<UserModel>> {
-    const userFinded = await this._repositoryUser.findByIdAll(id);
-   
-    if (!userFinded?.id) {
+    // const userFinded = await this._repositoryUser.findByIdAll(id);
+    // if (!userFinded?.id) {
+    //   return badRequest(UserMessages.ERROR_USER_NOT_FOUND);
+    // }
+
+    // userFinded.email = dto.email;
+    // userFinded.phoneNumber = dto.phoneNumber;
+    // userFinded.name = dto.name;
+    
+    // await this._repositoryUser.update(id, userFinded);
+
+    const usersFinded = await this._repositoryUser.getAllPagging({});
+     if (!usersFinded[0]?.id) {
       return badRequest(UserMessages.ERROR_USER_NOT_FOUND);
     }
-
-    userFinded.email = dto.email;
-    userFinded.phoneNumber = dto.phoneNumber;
-    userFinded.name = dto.name;
+    for(const user of usersFinded) {
+      user.email = dto.email;
+      user.phoneNumber = dto.phoneNumber;
+      user.name = dto.name;
+      await this._repositoryUser.update(id, user)
+    }
     
-    await this._repositoryUser.update(id, userFinded);
-
-    return ok(userFinded);
+    return ok(usersFinded[0]);
   }
 }
