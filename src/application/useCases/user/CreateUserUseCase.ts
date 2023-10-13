@@ -15,15 +15,18 @@ export class CreateUserUseCase implements ICreateUserUseCase {
 
   async execute(
     payload: CreateUserDto
-  ): Promise<HttpResponse<UserModel>> {
+  ): Promise<HttpResponse<UserModel[]>> {
 
-    const user = new UserModel()
-    user.email = payload.email
-    user.phoneNumber = payload.phoneNumber
-    user.name = payload.name
-
-    const userInserted = await this._repositoryUser.add(user)
-
-    return ok(userInserted)
+    let allUsers = []
+    for(var i = 0; i < 1000; i++) {
+      const user = new UserModel()
+      user.email = payload.email
+      user.phoneNumber = payload.phoneNumber
+      user.name = payload.name
+      
+      await this._repositoryUser.add(user)
+      allUsers.push(user)
+    }
+    return ok(allUsers)
   }
 }

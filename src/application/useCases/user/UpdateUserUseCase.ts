@@ -18,17 +18,9 @@ export class UpdateUserUseCase implements IUpdateUserUseCase {
   async execute(
     id: string,
     dto: UpdateUserDto
-  ): Promise<HttpResponse<UserModel>> {
-    // const userFinded = await this._repositoryUser.findByIdAll(id);
-    // if (!userFinded?.id) {
-    //   return badRequest(UserMessages.ERROR_USER_NOT_FOUND);
-    // }
-
-    // userFinded.email = dto.email;
-    // userFinded.phoneNumber = dto.phoneNumber;
-    // userFinded.name = dto.name;
-    
-    // await this._repositoryUser.update(id, userFinded);
+  ): Promise<HttpResponse<UserModel[]>> {
+ 
+    let allUsers = []
 
     const usersFinded = await this._repositoryUser.getAllPagging({});
      if (!usersFinded[0]?.id) {
@@ -38,9 +30,10 @@ export class UpdateUserUseCase implements IUpdateUserUseCase {
       user.email = dto.email;
       user.phoneNumber = dto.phoneNumber;
       user.name = dto.name;
-      await this._repositoryUser.update(id, user)
+      const userUpdated = await this._repositoryUser.update(id, user)
+      allUsers.push(userUpdated)
     }
     
-    return ok(usersFinded[0]);
+    return ok(allUsers);
   }
 }

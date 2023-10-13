@@ -6,5 +6,5 @@ export interface IUpdateUserUseCase {
   execute: (
     id: string,
     dto: UpdateUserDto
-  ) => Promise<HttpResponse<UserModel>>
+  ) => Promise<HttpResponse<UserModel[]>>
 }

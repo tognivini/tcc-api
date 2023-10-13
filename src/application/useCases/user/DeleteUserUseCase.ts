@@ -20,13 +20,8 @@ export class DeleteUserUseCase implements IDeleteUserUseCase {
   async execute(
     id: string,
   ): Promise<HttpResponse<UserModel>> {
-    // const userFinded = await this._repositoryUser.findById(id)
-    // if (!userFinded?.id){
-    //   return badRequest(UserMessages.ERROR_USER_NOT_FOUND)
-    // }
-    // await this._repositoryUser.delete(id)
     const usersFinded = await this._repositoryUser.getAllPagging({});
-     if (!usersFinded[0]?.id) {
+    if (!usersFinded[0]?.id) {
       return badRequest(UserMessages.ERROR_USER_NOT_FOUND);
     }
     for(const user of usersFinded) {

@@ -5,5 +5,5 @@ import { UserModel } from '../../../../models/_index'
 export interface ICreateUserUseCase {
   execute: (
     payload: CreateUserDto
-  ) => Promise<HttpResponse<UserModel>>
+  ) => Promise<HttpResponse<UserModel[]>>
 }
